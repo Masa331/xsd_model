@@ -9,7 +9,16 @@ module XsdModel
     end
 
     def from_xml(xml)
-      new(name: 'Premysl Donat')
+      instance = new
+      doc = Nokogiri::XML(xml)
+
+      doc.children.each do |child|
+        if child.children.all? &:text?
+          instance.send("#{child.name}=", child.text)
+        end
+      end
+
+      instance
     end
 
     def build_with_xsd(path)
