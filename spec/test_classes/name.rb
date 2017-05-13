@@ -1,5 +1,5 @@
 class Name
-  include XsdModel
+  include XsdModel::Model
 
   build_with_xsd './spec/xsd/name.xsd'
 end

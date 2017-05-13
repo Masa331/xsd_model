@@ -1,5 +1,5 @@
 class Note
-  include XsdModel
+  include XsdModel::Model
 
   build_with_xsd './spec/xsd/note.xsd'
 end
