@@ -25,7 +25,7 @@ describe Note do
     end
   end
 
-  describe '#to_xml' do
+  xdescribe '#to_xml' do
     it "outputs model in xml valid by it's xsd" do
       note = Note.new(to: 'Premysl Donat', from: 'Fred', heading: 'Hi!')
 
@@ -33,7 +33,7 @@ describe Note do
     end
   end
 
-  describe '::from_xml' do
+  xdescribe '::from_xml' do
     it 'intializes new instance from given xml' do
       xml = File.read('./spec/xml/note.xml')
       note = Note.from_xml(xml)

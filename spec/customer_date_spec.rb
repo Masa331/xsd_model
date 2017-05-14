@@ -24,7 +24,7 @@ describe CustomerDate do
     end
   end
 
-  describe '#to_xml' do
+  xdescribe '#to_xml' do
     it "outputs model in xml valid by it's xsd" do
       customer_date = CustomerDate.new(Customer_date: Date.parse('26.10.2001'))
 
@@ -32,7 +32,7 @@ describe CustomerDate do
     end
   end
 
-  describe '::from_xml' do
+  xdescribe '::from_xml' do
     it 'intializes new instance from given xml' do
       xml = File.read('./spec/xml/customer_date.xml')
       customer_date = CustomerDate.from_xml(xml)

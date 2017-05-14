@@ -35,7 +35,7 @@ describe Order do
     end
   end
 
-  describe '#to_xml' do
+  xdescribe '#to_xml' do
     it "outputs model in xml valid by it's xsd" do
       customer = Order::Customer.new(Dob: Date.parse('12.1.2000'),
                                      Address: Order::Address.new(Line1: '34 thingy street, someplace',
@@ -50,7 +50,7 @@ describe Order do
     end
   end
 
-  describe '::from_xml' do
+  xdescribe '::from_xml' do
     it 'intializes new instance from given xml' do
       xml = File.read('./spec/xml/order.xml')
       order = Order.from_xml(xml)
