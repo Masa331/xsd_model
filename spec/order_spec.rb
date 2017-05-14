@@ -7,9 +7,15 @@ describe Order do
 
     expect(order).to have_accessor :Customer
     expect(order).to have_accessor :Supplier
+
+    expect(order.Customer).to have_accessor :Dob
+    expect(order.Customer).to have_accessor :Address
+
+    expect(order.Supplier).to have_accessor :Phone
+    expect(order.Supplier).to have_accessor :Address
   end
 
-  context 'validations are performed through validators on model itself' do
+  xcontext 'validations are performed through validators on model itself' do
     it 'is valid in initial state' do
       order = Order.new
 
