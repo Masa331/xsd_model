@@ -13,6 +13,12 @@ describe Order do
 
     expect(order.Supplier).to have_accessor :Phone
     expect(order.Supplier).to have_accessor :Address
+
+    expect(order.Customer.Address).to have_accessor :Line1
+    expect(order.Customer.Address).to have_accessor :Line2
+
+    expect(order.Supplier.Address).to have_accessor :Line1
+    expect(order.Supplier.Address).to have_accessor :Line2
   end
 
   xcontext 'validations are performed through validators on model itself' do
