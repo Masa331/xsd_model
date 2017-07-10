@@ -1,6 +1,5 @@
 module XsdModel
   module Types
-
     class XsDate
       def initialize(schema)
         @schema = schema

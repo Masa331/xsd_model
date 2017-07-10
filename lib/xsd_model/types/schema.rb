@@ -15,11 +15,11 @@ module XsdModel
             if elem['type'].present?
               t = elem['type'].split(':').map(&:upcase_first).join
 
-              "XsdModel::Types::#{t}".constantize
+              XsdModel::Types.const_get t
             else
               t = elem.name.upcase_first
 
-              "XsdModel::Types::#{t}".constantize
+              XsdModel::Types.const_get t
             end
 
           type_class.new(elem).define_accessor(model)

@@ -10,7 +10,11 @@ module XsdModel
         method_name = @schema['name']
 
         # parents is rails method and -2 is class before Object
+        # if model.ancestors.first.parents[-2].nil?
+        #   require 'pry'; binding.pry
+        # end
         element_class = model.ancestors.first.parents[-2].const_get(t)
+        # element_class = model
 
         model.class_eval do
           define_method method_name do
