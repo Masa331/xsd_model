@@ -2,6 +2,7 @@ require 'xsd_model/version'
 require 'nokogiri'
 
 require_relative 'xsd_model/types'
+require_relative 'xsd_model/type_class_resolver'
 
 module XsdModel
   module Model
