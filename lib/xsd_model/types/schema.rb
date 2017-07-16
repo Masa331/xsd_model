@@ -12,7 +12,7 @@ module XsdModel
 
         elems.each do |elem|
           type_class =
-            TypeClassResolver.call(elem)
+            TypeClassResolver.call(elem, model)
 
           type_class.new(elem).define_accessor(model)
         end
