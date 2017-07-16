@@ -12,7 +12,7 @@ module XsdModel
 
         elems.each do |elem|
           type_class =
-            if elem['type'].present?
+            if !elem['type'].nil?
               t = elem['type'].split(':').map(&:capitalize).join
 
               XsdModel::Types.const_get t

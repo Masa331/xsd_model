@@ -10,18 +10,14 @@ module XsdModel
 
         elems.each do |elem|
           type_class =
-            if elem['type'].present?
-              # t = elem['type'].split(':').map(&:upcase_first).join
+            if !elem['type'].nil?
               t = elem['type'].split(':').map(&:capitalize).join
 
-              # "XsdModel::Types::#{t}".constantize
               XsdModel::Types.const_get t
             else
-              # t = elem.name.upcase_first
               t = elem.name
               t[0] = t[0].upcase
 
-              # "XsdModel::Types::#{t}".constantize
               XsdModel::Types.const_get t
             end
 
