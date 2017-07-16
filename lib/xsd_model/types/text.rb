@@ -6,6 +6,10 @@ module XsdModel
 
       def define_accessor(model)
       end
+
+      def complex_element?
+        false
+      end
     end
   end
 end

@@ -8,7 +8,7 @@ describe Name do
     expect(name).to have_accessor :name
   end
 
-  context 'validations are performed through validators on model itself' do
+  xcontext 'validations are performed through validators on model itself' do
     it 'is valid with anything in name' do
       name = Name.new
 

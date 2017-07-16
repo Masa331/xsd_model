@@ -1,6 +1,5 @@
 module XsdModel
   module Types
-
     class XsInteger
       def initialize(schema)
         @schema = schema
@@ -12,6 +11,10 @@ module XsdModel
         model.class_eval do
           attr_accessor name
         end
+      end
+
+      def complex_element?
+        false
       end
     end
   end
