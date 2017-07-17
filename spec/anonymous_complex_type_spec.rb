@@ -1,8 +1,8 @@
 require 'spec_helper'
 require_relative 'test_classes/note'
 
-describe Note do
-  it 'it has all accessors defined in xsd' do
+describe 'anonymous complex type' do
+  it 'works' do
     note = Note.new
 
     expect(note).to have_accessor :to

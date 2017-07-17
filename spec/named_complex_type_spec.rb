@@ -1,8 +1,8 @@
 require 'spec_helper'
 require_relative 'test_classes/order'
 
-describe Order do
-  it 'it has all accessors defined in xsd' do
+describe 'named complex types' do
+  it 'works' do
     order = Order.new
 
     expect(order).to have_accessor :Customer

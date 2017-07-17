@@ -6,11 +6,10 @@ module XsdModel
       end
 
       def define_accessor(model)
-        elems = @schema.children
-        elems.each do |elem|
-          type_class = TypeClassResolver.call(elem, model)
+        @schema.children.each do |element|
+          type_class = TypeClassResolver.call(element, model)
 
-          type_class.new(elem).define_accessor(model)
+          type_class.new(element).define_accessor(model)
         end
       end
     end

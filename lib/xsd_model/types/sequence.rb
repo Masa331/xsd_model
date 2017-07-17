@@ -6,19 +6,19 @@ module XsdModel
       end
 
       def define_accessor(model)
-        @schema.children.each do |elem|
-          if elem.text?
+        @schema.children.each do |element|
+          if element.text?
             next
           end
 
-          type_class = TypeClassResolver.call(elem, model)
+          type_class = TypeClassResolver.call(element, model)
 
           element_class =
-            if elem['type'].nil?
+            if element['type'].nil?
               klass = Class.new do
               end
 
-              method_name = elem['name']
+              method_name = element['name']
               element_class = model.const_set(method_name + 'Type', klass)
               model.class_eval do
                 define_method method_name do
@@ -35,7 +35,7 @@ module XsdModel
               model
             end
 
-          type_class.new(elem).define_accessor(element_class)
+          type_class.new(element).define_accessor(element_class)
         end
       end
     end

@@ -1,8 +1,8 @@
-require 'spec_helper'
+# require 'spec_helper'
 # require_relative 'test_classes/isdoc_invoice'
-
+#
 # describe IsdocInvoice do
-#   it 'it has all accessors defined in xsd' do
+#   it 'works' do
 #     invoice = IsdocInvoice.new
 #
 #     expect(invoice).to have_accessor :DocumentType

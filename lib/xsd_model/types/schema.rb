@@ -8,13 +8,10 @@ module XsdModel
       end
 
       def define_attributes(model)
-        elems = schema.children
+        schema.children.each do |element|
+          type_class = TypeClassResolver.call(element, model)
 
-        elems.each do |elem|
-          type_class =
-            TypeClassResolver.call(elem, model)
-
-          type_class.new(elem).define_accessor(model)
+          type_class.new(element).define_accessor(model)
         end
       end
     end
