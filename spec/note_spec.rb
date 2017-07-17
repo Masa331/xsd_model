@@ -10,38 +10,4 @@ describe Note do
     expect(note).to have_accessor :heading
     expect(note).to have_accessor :body
   end
-
-  xcontext 'validations are performed through validators on model itself' do
-    it 'is valid with anything in note' do
-      note = Note.new
-
-      expect(note).to be_valid
-    end
-
-    it 'is valid with blank note' do
-      note = Note.new(to: 'Premysl Donat')
-
-      expect(note).to be_valid
-    end
-  end
-
-  xdescribe '#to_xml' do
-    it "outputs model in xml valid by it's xsd" do
-      note = Note.new(to: 'Premysl Donat', from: 'Fred', heading: 'Hi!')
-
-      expect(note.to_xml.to_xml).to eq File.read('./spec/xml/note.xml')
-    end
-  end
-
-  xdescribe '::from_xml' do
-    it 'intializes new instance from given xml' do
-      xml = File.read('./spec/xml/note.xml')
-      note = Note.from_xml(xml)
-
-      expect(note.to).to eq 'Premysl Donat'
-      expect(note.from).to eq 'Fred'
-      expect(note.heading).to eq 'Hi!'
-      expect(note.body).to eq ""
-    end
-  end
 end
