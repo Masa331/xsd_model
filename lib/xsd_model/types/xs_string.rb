@@ -12,10 +12,6 @@ module XsdModel
           attr_accessor name
         end
       end
-
-      def complex_element?
-        false
-      end
     end
   end
 end

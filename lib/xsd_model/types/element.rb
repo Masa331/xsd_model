@@ -13,10 +13,6 @@ module XsdModel
           type_class.new(elem).define_accessor(model)
         end
       end
-
-      def complex_element?
-        true
-      end
     end
   end
 end
