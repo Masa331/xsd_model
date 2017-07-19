@@ -24,18 +24,33 @@ module XsdModel
       end
 
       def const_missing(name)
+        find_in_schema(name) || super
+      end
+
+      private
+
+      def find_in_schema(name)
+        find_named_complex_type(name) || find_group(name)
+      end
+
+      def find_named_complex_type(name)
         type_root = schema.xpath("xs:schema/xs:complexType[@name='#{name}']")
 
-        klass = Class.new do
-          def define_accessor(model)
-          end
-        end
-        element_class = self.const_set(name, klass)
+        return nil unless type_root.any?
 
-        root_element_schema = Types::Schema.new(type_root)
-        root_element_schema.define_attributes(klass)
+        constant = Class.new
+        Types::Schema.new(type_root).define_attributes(constant)
+        self.const_set(name, constant)
+      end
 
-        klass
+      def find_group(name)
+        type_root = schema.xpath("xs:schema/xs:group[@name='#{name}']")
+
+        return nil unless type_root.any?
+
+        constant = Module.new
+        Types::Schema.new(type_root).define_attributes(constant)
+        self.const_set(name, constant)
       end
     end
 

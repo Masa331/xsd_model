@@ -24,7 +24,6 @@ module XsdModel
 
         XsdModel::Types.const_get t
       end
-
     end
   end
 end
