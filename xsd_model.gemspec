@@ -5,7 +5,7 @@ require 'xsd_model/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "xsd_model"
-  spec.version       = XsdModel::VERSION
+  spec.version       = "0.2.0"
   spec.authors       = ["Premysl Donat"]
   spec.email         = ["pdonat@seznam.cz"]
 
@@ -22,6 +22,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'nokogiri'
+  spec.add_dependency 'active_support'
 
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'bundler', '~> 1.13'
