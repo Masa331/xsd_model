@@ -1,17 +1,19 @@
-$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+require 'bundler/setup'
 require 'xsd_model'
 
-RSpec::Matchers.define :have_accessor do |expected|
-  match do |actual|
-    initial_value = actual.send(expected)
-    test_value = 'something'
+#TODO: How can i define this only on example group?
+def Object.const_missing(name)
+  if XsdModel::Elements.const_defined? name
+    XsdModel::Elements.const_get name
+  else
+    super
+  end
+end
 
-    actual.send "#{expected}=", test_value
-    result = actual.send(expected) == test_value
+RSpec.configure do |config|
+  config.disable_monkey_patching!
 
-    # i need to set back initial value or subsequent accessor tests won't work
-    actual.send "#{expected}=", initial_value
-
-    result
+  config.expect_with :rspec do |c|
+    c.syntax = :expect
   end
 end

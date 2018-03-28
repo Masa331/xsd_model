@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="subschema.xsd">
+  <xs:import schemaLocation="dependencies.xsd"/>
+  <xs:include schemaLocation="dependencies2.xsd"/>
+</xs:schema>

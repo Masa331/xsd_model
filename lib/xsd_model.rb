@@ -1,61 +1,29 @@
-require 'xsd_model/version'
-require 'nokogiri'
-
-require_relative 'xsd_model/types'
-require_relative 'xsd_model/type_class_resolver'
+require 'xsd_model/parser'
+require 'xsd_model/xsdize'
 
 module XsdModel
-  module Model
-    module ClassMethods
-      def build_with_xsd(path)
-        file = File.open(path)
-        xsd = Nokogiri::XML(file)
-        root_element_schema = Types::Schema.new(xsd.xpath('xs:schema').first)
+  class UnknownOptionType < StandardError; end
 
-        class_variable_set(:@@schema, xsd)
+  using Xsdize
 
-        root_element_schema.define_attributes(self)
+  def self.parse(xml_string, options = {})
+    Parser.call(xml_string, normalize_options(options))
+  end
 
-        schema
+  private
+
+  def self.normalize_options(options)
+    options.transform_values do |value|
+      case value
+      when Proc
+        then value
+      when String, Symbol
+        then -> (child) { [value.xsdize].include? child.name }
+      when Array
+        then -> (child) { value.map(&:xsdize).include? child.name }
+      else
+        fail UnknownOptionType, 'Option given has to be either String, Symbol, Array, or Proc.'
       end
-
-      def schema
-        class_variable_get(:@@schema)
-      end
-
-      def const_missing(name)
-        find_in_schema(name) || super
-      end
-
-      private
-
-      def find_in_schema(name)
-        find_named_complex_type(name) || find_group(name)
-      end
-
-      def find_named_complex_type(name)
-        type_root = schema.xpath("xs:schema/xs:complexType[@name='#{name}']")
-
-        return nil unless type_root.any?
-
-        constant = Class.new
-        Types::Schema.new(type_root).define_attributes(constant)
-        self.const_set(name, constant)
-      end
-
-      def find_group(name)
-        type_root = schema.xpath("xs:schema/xs:group[@name='#{name}']")
-
-        return nil unless type_root.any?
-
-        constant = Module.new
-        Types::Schema.new(type_root).define_attributes(constant)
-        self.const_set(name, constant)
-      end
-    end
-
-    def self.included(base)
-      base.extend(ClassMethods)
     end
   end
 end
