@@ -1,5 +1,37 @@
 module XsdModel
   class TypeClassResolver
+    class Element
+      def initialize(xml)
+        @xml = xml
+      end
+
+      def no_type?
+        @xml['type'].nil?
+      end
+
+      def simple_type?
+        name == 'SimpleType'
+      end
+
+      def custom_type?
+        !@xml['type'].nil? && !xs_type?
+      end
+
+      def xs_type?
+        @xml['type'].start_with?('xs:')
+      end
+
+      def type
+        @xml['type'].split(':').map(&:capitalize).join
+      end
+
+      def name
+        t = @xml.name
+        t[0] = t[0].upcase
+        t
+      end
+    end
+
     def self.call(element, model)
       new(element, model).call
     end
@@ -7,22 +39,21 @@ module XsdModel
     attr_accessor :element, :model
 
     def initialize(element, model)
-      @element = element
+      @element = Element.new(element)
       @model = model
     end
 
     def call
-      if !element['type'].nil? && element['type'].start_with?('xs:')
-        t = element['type'].split(':').map(&:capitalize).join
-
-        XsdModel::Types.const_get t
-      elsif !element['type'].nil?
+      require 'pry'; binding.pry
+      # tohle mi vubec nepomuze, protoze ten element neni v tomto pripade simple_type ale proste element
+      if element.simple_type? || element.no_type?
+        XsdModel::Types.const_get element.name
+      elsif element.xs_type?
+        XsdModel::Types.const_get element.type
+      elsif element.custom_type?
         XsdModel::Types::ElementWithUserType
       else
-        t = element.name
-        t[0] = t[0].upcase
-
-        XsdModel::Types.const_get t
+        fail 'nondeducible element type'
       end
     end
   end
