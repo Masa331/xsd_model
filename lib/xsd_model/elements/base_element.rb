@@ -3,13 +3,14 @@ module XsdModel
     module BaseElement
       attr_accessor :children, :attributes
 
-      def initialize(children, attributes)
+      def initialize(children = [], attributes = {})
         @children = children
         @attributes = attributes
       end
 
-      def imports
-        children.select { |child| child.is_a? Elements::Import }
+      def structure
+        { name: self.class.to_s.split('::').last,
+          children: children.map { |ch| ch.structure } }
       end
     end
 

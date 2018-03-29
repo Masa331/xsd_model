@@ -1,7 +1,6 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'xsd_model/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "xsd_model"
@@ -22,7 +21,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'nokogiri'
-  spec.add_dependency 'active_support'
+  spec.add_dependency 'activesupport'
 
   spec.add_development_dependency 'pry'
   spec.add_development_dependency 'bundler', '~> 1.13'

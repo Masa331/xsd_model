@@ -3,34 +3,74 @@ require 'active_support/inflector'
 # require_relative 'xsd_model/element_factory'
 load Dir.pwd + '/lib/xsd_model/element_factory.rb'
 
+#TODO: turn into refinement
+module Nokogiri
+  module XML
+    class Document
+      def attributes
+        attrs = {}
+
+        attrs[:encoding] = encoding if encoding
+        attrs[:version] = version if version
+
+        attrs
+      end
+    end
+  end
+end
+
 module XsdModel
+  class UnknownOptionType < StandardError; end
+
   def self.parse(xml_string, options = {})
     options = normalize_options(options)
     xml = Nokogiri::XML(xml_string)
-    schema = xml.children.first
 
-    # there can be more than one element at root(comment for example)
-    elements = xml.children.map { |child| ElementFactory.call(child, options) }
-    elements = filter_by_options(elements, options)
+    _parse(xml, options)
+  end
 
-    schemas = elements.select { |element| element.is_a? Elements::Schema }
+  def self._parse(xml, options)
+    if xml.is_a?(Array) || xml.is_a?(Nokogiri::XML::NodeSet)
+      parse_multiple(xml, options)
+    else
+      parse_one(xml, options)
+    end
+  end
 
-    (elements + schemas.map { |schema| collect_imported_schemas(schema) }).flatten
+  def self.parse_multiple(xmls, options)
+    xmls.map { |child| _parse(child, options) }.compact
+  end
+
+  def self.parse_one(xml, options)
+    if options[:collect_only].any? && !options[:collect_only].include?(xml.name)
+      return nil
+    elsif options[:ignore].any? && options[:ignore].include?(xml.name)
+      return nil
+    else
+      element = ElementFactory.call(xml, options)
+      element.attributes = xml.attributes
+      children = collect_children(xml, options)
+      element.children = _parse children, options
+
+      element
+    end
+  end
+
+  def self.collect_children(xml, options)
+    if options[:skip_through].any?
+
+      skippable = xml.children.select { |child| options[:skip_through].include? child.name }
+      children = xml.children.select { |child| !options[:skip_through].include? child.name }
+
+      all = children + skippable.flat_map { |child| collect_children(child, options) }
+
+      all
+    else
+      xml.children
+    end
   end
 
   private
-
-  def self.filter_by_options(elements, options)
-    if options[:collect_only].any?
-      elements = elements.select { |element| options[:collect_only].include? element.class }
-    end
-
-    if options[:ignore].any?
-      elements = elements.reject { |element| options[:ignore].include? element.class }
-    end
-
-    elements
-  end
 
   def self.collect_imported_schemas(original_schema, already_collected = [])
     imports = original_schema.imports
@@ -47,19 +87,22 @@ module XsdModel
   end
 
   def self.normalize_options(options)
-    { collect_only: classify(options.fetch(:collect_only, [])),
-      ignore: classify(options.fetch(:ignore, [])),
-      skip_through: classify(options.fetch(:skip_through, []))
+    { collect_only: normalize_option(options[:collect_only]),
+      ignore: normalize_option(options[:ignore]),
+      skip_through: normalize_option(options[:skip_through])
     }
   end
 
-  def self.classify(option)
-    [*option].map do |o|
-      if o.is_a?(String) || o.is_a?(Symbol)
-        Elements.const_get o.to_s.classify
-      else
-        o
-      end
+  def self.normalize_option(option)
+    case option
+    when nil
+      then []
+    when String, Symbol
+      then [option.to_s.singularize]
+    when Array
+      then option.map { |member| member.to_s.singularize.camelize(:lower) }
+    else
+      fail UnknownOptionType, 'Option given has to be either String, Symbol, Array, or nil.'
     end
   end
 end

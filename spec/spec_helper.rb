@@ -1,17 +1,11 @@
-$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+require 'bundler/setup'
 require 'xsd_model'
 
-RSpec::Matchers.define :have_accessor do |expected|
-  match do |actual|
-    initial_value = actual.send(expected)
-    test_value = 'something'
+RSpec.configure do |config|
+  # Disable RSpec exposing methods globally on `Module` and `main`
+  config.disable_monkey_patching!
 
-    actual.send "#{expected}=", test_value
-    result = actual.send(expected) == test_value
-
-    # i need to set back initial value or subsequent accessor tests won't work
-    actual.send "#{expected}=", initial_value
-
-    result
+  config.expect_with :rspec do |c|
+    c.syntax = :expect
   end
 end

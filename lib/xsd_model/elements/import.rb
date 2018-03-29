@@ -7,14 +7,12 @@ module XsdModel
         attributes['namespace'].value
       end
 
+      #TODO: predat options/moznost stanovit options
       def load
         location = attributes['schemaLocation'].value
         xml_string = File.read(location)
 
-        xml = Nokogiri::XML(xml_string)
-        schema = xml.children.first
-
-        ElementFactory.call(schema)
+        XsdModel.parse(xml_string).schema
       end
     end
   end

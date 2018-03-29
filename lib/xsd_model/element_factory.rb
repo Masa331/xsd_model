@@ -18,18 +18,24 @@ module XsdModel
 
     attr_accessor :xml
 
-    def initialize(xml)
+    def initialize(xml, options)
       @xml = xml
       @options = options
     end
 
+    # def call
+    #   name = xml.name
+    #   children = xml.children.map { |child| ElementFactory.call(child) }
+    #   attributes = xml.attributes
+    #
+    #   element_class = XsdModel::Elements.const_get name.classify
+    #   element_class.new(children, attributes)
+    # end
+
     def call
       name = xml.name
-      children = xml.children.map { |child| ElementFactory.call(child) }
-      attributes = xml.attributes
-
-      element_class = XsdModel::Elements.const_get name.classify
-      element_class.new(children, attributes)
+      klass = XsdModel::Elements.const_get name.classify
+      klass.new
     end
   end
 end
