@@ -1,11 +1,7 @@
 module XsdModel
   module Elements
-    class Import
+    class Include
       include BaseElement
-
-      def namespace
-        attributes['namespace'].value
-      end
 
       def schema_location
         attributes['schemaLocation'].value

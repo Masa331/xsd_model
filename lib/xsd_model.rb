@@ -1,7 +1,42 @@
 require 'nokogiri'
 require 'active_support/inflector'
-# require_relative 'xsd_model/element_factory'
-load Dir.pwd + '/lib/xsd_model/element_factory.rb'
+require 'xsd_model/element_factory'
+
+require 'xsd_model/elements/base_element'
+require 'xsd_model/elements/import'
+require 'xsd_model/elements/document'
+require 'xsd_model/elements/max_length'
+require 'xsd_model/elements/choice'
+require 'xsd_model/elements/min_inclusive'
+require 'xsd_model/elements/min_length'
+require 'xsd_model/elements/comment'
+require 'xsd_model/elements/any'
+require 'xsd_model/elements/simple_content'
+require 'xsd_model/elements/white_space'
+require 'xsd_model/elements/extension'
+require 'xsd_model/elements/sequence'
+require 'xsd_model/elements/complex_content'
+require 'xsd_model/elements/documentation'
+require 'xsd_model/elements/any_attribute'
+require 'xsd_model/elements/max_inclusive'
+require 'xsd_model/elements/attribute'
+require 'xsd_model/elements/complex_type'
+require 'xsd_model/elements/pattern'
+require 'xsd_model/elements/length'
+require 'xsd_model/elements/annotation'
+require 'xsd_model/elements/schema'
+require 'xsd_model/elements/element'
+require 'xsd_model/elements/union'
+require 'xsd_model/elements/text'
+require 'xsd_model/elements/base_element'
+require 'xsd_model/elements/all'
+require 'xsd_model/elements/enumeration'
+require 'xsd_model/elements/group'
+require 'xsd_model/elements/attribute_group'
+require 'xsd_model/elements/restriction'
+require 'xsd_model/elements/simple_type'
+
+# load Dir.pwd + '/lib/dev.rb'
 
 #TODO: turn into refinement
 module Nokogiri
@@ -71,20 +106,6 @@ module XsdModel
   end
 
   private
-
-  def self.collect_imported_schemas(original_schema, already_collected = [])
-    imports = original_schema.imports
-
-    imports.each do |import|
-      unless already_collected.map(&:target_namespace).include? import.namespace
-        new_schema = import.load
-        already_collected << new_schema
-        collect_imported_schemas(new_schema, already_collected)
-      end
-    end
-
-    already_collected
-  end
 
   def self.normalize_options(options)
     { collect_only: normalize_option(options[:collect_only]),
