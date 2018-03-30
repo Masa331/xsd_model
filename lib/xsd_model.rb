@@ -82,12 +82,10 @@ module XsdModel
     elsif options[:ignore].any? && options[:ignore].include?(xml.name)
       return nil
     else
-      element = ElementFactory.call(xml, options)
-      element.attributes = xml.attributes
-      children = collect_children(xml, options)
-      element.children = _parse children, options
-
-      element
+      ElementFactory.call(xml) do |element|
+        children = collect_children(xml, options)
+        element.children = _parse children, options
+      end
     end
   end
 

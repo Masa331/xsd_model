@@ -1,20 +1,23 @@
 module XsdModel
   class ElementFactory
-    def self.call(xml, options = {})
-      new(xml, options).call
+    def self.call(xml, &block)
+      new(xml).call(&block)
     end
 
     attr_accessor :xml
 
-    def initialize(xml, options)
+    def initialize(xml)
       @xml = xml
-      @options = options
     end
 
     def call
-      name = xml.name
-      klass = XsdModel::Elements.const_get name.classify
-      klass.new
+      klass = XsdModel::Elements.const_get xml.name.classify
+      element = klass.new
+      element.attributes = xml.attributes
+      element.namespaces = xml.namespaces
+
+      yield element if block_given?
+      element
     end
   end
 end

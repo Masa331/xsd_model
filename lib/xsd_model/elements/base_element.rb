@@ -1,11 +1,12 @@
 module XsdModel
   module Elements
     module BaseElement
-      attr_accessor :children, :attributes
+      attr_accessor :children, :attributes, :namespaces
 
-      def initialize(children = [], attributes = {})
+      def initialize(children = [], attributes = {}, namespaces = {})
         @children = children
         @attributes = attributes
+        @namespaces = namespaces
       end
 
       def structure
