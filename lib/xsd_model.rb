@@ -54,6 +54,19 @@ module Nokogiri
   end
 end
 
+#TODO: turn into refinement
+class String
+  def xsdize
+    singularize.camelize(:lower)
+  end
+end
+#TODO: turn into refinement
+class Symbol
+  def xsdize
+    to_s.singularize.camelize(:lower)
+  end
+end
+
 module XsdModel
   class UnknownOptionType < StandardError; end
 
@@ -77,51 +90,35 @@ module XsdModel
   end
 
   def self.parse_one(xml, options)
-    if options[:collect_only].any? && !options[:collect_only].include?(xml.name)
-      return nil
-    elsif options[:ignore].any? && options[:ignore].include?(xml.name)
-      return nil
-    else
-      ElementFactory.call(xml) do |element|
-        children = collect_children(xml, options)
-        element.children = _parse children, options
-      end
+    ElementFactory.call(xml) do |element|
+      children = collect_children(xml, options)
+      element.children = _parse children, options
     end
   end
 
   def self.collect_children(xml, options)
-    if options[:skip_through].any?
-
-      skippable = xml.children.select { |child| options[:skip_through].include? child.name }
-      children = xml.children.select { |child| !options[:skip_through].include? child.name }
-
-      all = children + skippable.flat_map { |child| collect_children(child, options) }
-
-      all
-    else
-      xml.children
+    skippable, collectible = xml.children.partition do |child|
+      (options[:collect_only] && !options[:collect_only].call(child)) ||
+        (options[:ignore] && options[:ignore].call(child))
     end
+
+    collectible + skippable.flat_map { |child| collect_children(child, options) }
   end
 
   private
 
   def self.normalize_options(options)
-    { collect_only: normalize_option(options[:collect_only]),
-      ignore: normalize_option(options[:ignore]),
-      skip_through: normalize_option(options[:skip_through])
-    }
-  end
-
-  def self.normalize_option(option)
-    case option
-    when nil
-      then []
-    when String, Symbol
-      then [option.to_s.singularize]
-    when Array
-      then option.map { |member| member.to_s.singularize.camelize(:lower) }
-    else
-      fail UnknownOptionType, 'Option given has to be either String, Symbol, Array, or nil.'
+    options.transform_values do |value|
+      case value
+      when Proc
+        then value
+      when String, Symbol
+        then -> (child) { [value.xsdize].include? child.name }
+      when Array
+        then -> (child) { value.map(&:xsdize).include? child.name }
+      else
+        fail UnknownOptionType, 'Option given has to be either String, Symbol, Array, or Proc.'
+      end
     end
   end
 end
