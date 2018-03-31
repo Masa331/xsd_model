@@ -14,22 +14,14 @@ module XsdModel
           children: children.map { |ch| ch.structure } }
       end
 
-      def traverse(&block)
-        if block_given?
-          children.each do |child|
-            yield child
+      def traverse(after_children_hook = Proc.new {}, &block)
+        yield self
 
-            child.traverse &block
-          end
-        else
-          Enumerator.new do |enum|
-            children.each do |child|
-              enum.yield child
-
-              child.traverse { |n| enum.yield n }
-            end
-          end
+        children.each do |child|
+          child.traverse(after_children_hook, &block)
         end
+
+        after_children_hook.call(self)
       end
     end
   end
