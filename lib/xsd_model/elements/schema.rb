@@ -4,7 +4,7 @@ module XsdModel
       include BaseElement
 
       def target_namespace
-        attributes['targetNamespace'].value
+        attributes['targetNamespace']
       end
 
       def imports
