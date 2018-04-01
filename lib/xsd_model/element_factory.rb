@@ -13,7 +13,7 @@ module XsdModel
     def call
       klass = XsdModel::Elements.const_get xml.name.classify
       element = klass.new
-      element.attributes = xml.attributes
+      element.attributes = xml.attributes.transform_values { |v| v.value }
       element.namespaces = xml.namespaces
 
       yield element if block_given?

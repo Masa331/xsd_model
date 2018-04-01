@@ -4,15 +4,15 @@ module XsdModel
       include BaseElement
 
       def schema_location
-        attributes['schemaLocation'].value
+        attributes['schemaLocation']
       end
 
       #TODO: predat options/moznost stanovit options
-      def load
+      def load(options = {})
         location = schema_location
         xml_string = File.read(location)
 
-        XsdModel.parse(xml_string).schema
+        XsdModel.parse(xml_string, options).schema
       end
     end
   end
