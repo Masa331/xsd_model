@@ -9,9 +9,23 @@ module XsdModel
         @namespaces = namespaces
       end
 
-      def structure
-        { name: self.class.to_s.split('::').last,
-          children: children.map { |ch| ch.structure } }
+      # def array_structure
+      #   { name: self.class.to_s.split('::').last,
+      #     attributes: attributes.to_a.sort,
+      #     children: children.map { |ch| ch.structure }.sort }.to_a
+      # end
+      # def <=>(other)
+      #   structure <=> other.structure
+      # end
+
+      # def structure
+      #   { name: self.class.to_s.split('::').last,
+      #     children: children.map { |ch| ch.structure } }
+      # end
+
+      def ==(other)
+        (attributes == other.attributes) &&
+          (children == other.children)
       end
 
       def traverse(after_children_hook = Proc.new {}, &block)
