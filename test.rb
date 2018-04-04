@@ -66,7 +66,6 @@ module Handlers
   end
 
   def self.const_missing(sym)
-    puts "Missing const #{sym}, substituing WIP"
     WIP
   end
 end
@@ -87,7 +86,6 @@ class Handler
 
     if catched
       @stack << catched[0]
-      # @wip = Handlers::WIP.new
       @wip = catched[1] || Handlers::WIP.new
     end
   end
@@ -98,7 +96,7 @@ parsed = XsdModel.parse(schema, ignore: :text)
 
 handler = Handler.new
 
-parsed.reverse_traverse do |element, a|
+parsed.reverse_traverse do |element|
   handler << element
 end
 
