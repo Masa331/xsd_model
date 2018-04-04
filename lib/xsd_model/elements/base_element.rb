@@ -9,6 +9,10 @@ module XsdModel
         @namespaces = namespaces
       end
 
+      def element_name
+        self.class.name.demodulize.underscore
+      end
+
       # def array_structure
       #   { name: self.class.to_s.split('::').last,
       #     attributes: attributes.to_a.sort,
@@ -37,6 +41,32 @@ module XsdModel
 
         after_children_hook.call(self)
       end
+
+      def has_name?
+        !name.nil?
+      end
+
+      def name
+        attributes['name']
+      end
+
+      # def reverse_traverse(&block)
+      #   children.each do |child|
+      #     child.reverse_traverse(&block)
+      #   end
+      #
+      #   yield self
+      # end
+
+      def reverse_traverse(&block)
+        result = children.map do |child|
+          child.reverse_traverse(&block)
+        end
+
+        yield self, result
+      end
+      # parsed.reverse_traverse { |element, a| puts "#{'-' * (1 + a.sum)}"; 1 + a.sum }
+      # parsed.reverse_traverse { |element, a| puts "#{'-' * (1 + a.sum)} #{element.element_name} - #{element.attributes['name']}"; 1 + a.sum }
     end
   end
 end

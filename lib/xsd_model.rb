@@ -46,7 +46,7 @@ require 'xsd_model/elements/attribute_group'
 require 'xsd_model/elements/restriction'
 require 'xsd_model/elements/simple_type'
 
-# load Dir.pwd + '/lib/dev.rb'
+load Dir.pwd + '/lib/dev.rb'
 
 #TODO: turn into refinement
 module Nokogiri
