@@ -95,12 +95,9 @@ schema = File.read('schema.xsd')
 parsed = XsdModel.parse(schema, ignore: :text)
 
 STACK = Stack.instance
-handler = Handlers::Blank.new([])
 
-parsed.reverse_traverse do |element, childrens_result|
-  new_handler = childrens_result.handler
-
-  handler = new_handler.send(element.element_name, element)
+result = parsed.reverse_traverse do |element, childrens_result|
+  childrens_result.handler.send(element.element_name, element)
 end
 
-puts handler.to_a.map { |cl| "#{cl.name}: #{cl.content}" }
+puts result.to_a.map { |cl| "#{cl.name}: #{cl.content}" }
