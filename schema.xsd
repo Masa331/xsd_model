@@ -16,6 +16,15 @@
       <xs:sequence minOccurs="0">
         <xs:element name="customer2" type="customerType"/>
       </xs:sequence>
+
+      <xs:element name="payment">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="amount" type="xs:string">
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
     </xs:sequence>
   </xs:complexType>
 

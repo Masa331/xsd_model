@@ -59,11 +59,11 @@ module XsdModel
       # end
 
       def reverse_traverse(&block)
-        children.map do |child|
+        children_result = children.map do |child|
           child.reverse_traverse(&block)
         end
 
-        yield self
+        yield self, children_result
       end
       # parsed.reverse_traverse { |element, a| puts "#{'-' * (1 + a.sum)}"; 1 + a.sum }
       # parsed.reverse_traverse { |element, a| puts "#{'-' * (1 + a.sum)} #{element.element_name} - #{element.attributes['name']}"; 1 + a.sum }
