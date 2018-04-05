@@ -22,6 +22,15 @@
           <xs:sequence>
             <xs:element name="amount" type="xs:string">
             </xs:element>
+
+            <xs:element name="sender">
+              <xs:complexType>
+                <xs:sequence>
+                  <xs:element name="name" type="xs:string">
+                  </xs:element>
+                </xs:sequence>
+              </xs:complexType>
+            </xs:element>
           </xs:sequence>
         </xs:complexType>
       </xs:element>

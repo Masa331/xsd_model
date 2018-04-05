@@ -32,7 +32,7 @@ module Handlers
     include Base
 
     def element(source)
-      Element.new([source.name])
+      Handlers::Element.new(source.name)
     end
 
     def document(_)
@@ -53,21 +53,12 @@ module Handlers
     end
   end
 
-  class Element
-    include Base
-
-    def element(source)
-      self.wip << source.name
-      self
-    end
-  end
-
   class ComplexType
     include Base
 
     def element(source)
       STACK.push ClassTemplate.new(source.name, wip)
-      Element.new([source.name])
+      Handlers::Element.new(source.name)
     end
   end
 end
