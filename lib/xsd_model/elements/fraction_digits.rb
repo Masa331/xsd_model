@@ -1,6 +1,6 @@
 module XsdModel
   module Elements
-    class FractionDigit
+    class FractionDigits
       include BaseElement
     end
   end

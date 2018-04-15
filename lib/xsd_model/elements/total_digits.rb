@@ -1,6 +1,6 @@
 module XsdModel
   module Elements
-    class TotalDigit
+    class TotalDigits
       include BaseElement
     end
   end

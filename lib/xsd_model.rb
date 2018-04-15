@@ -36,7 +36,7 @@ require 'xsd_model/elements/element'
 require 'xsd_model/elements/fraction_digit'
 require 'xsd_model/elements/union'
 require 'xsd_model/elements/text'
-require 'xsd_model/elements/total_digit'
+require 'xsd_model/elements/total_digits'
 require 'xsd_model/elements/all'
 require 'xsd_model/elements/appinfo'
 require 'xsd_model/elements/enumeration'
@@ -69,7 +69,7 @@ end
 #TODO: turn into refinement
 class String
   def xsdize
-    singularize.camelize(:lower)
+    camelize(:lower)
   end
 end
 #TODO: turn into refinement
