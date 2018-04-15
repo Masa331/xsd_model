@@ -33,7 +33,7 @@ require 'xsd_model/elements/length'
 require 'xsd_model/elements/annotation'
 require 'xsd_model/elements/schema'
 require 'xsd_model/elements/element'
-require 'xsd_model/elements/fraction_digit'
+require 'xsd_model/elements/fraction_digits'
 require 'xsd_model/elements/union'
 require 'xsd_model/elements/text'
 require 'xsd_model/elements/total_digits'
@@ -75,7 +75,7 @@ end
 #TODO: turn into refinement
 class Symbol
   def xsdize
-    to_s.singularize.camelize(:lower)
+    to_s.camelize(:lower)
   end
 end
 

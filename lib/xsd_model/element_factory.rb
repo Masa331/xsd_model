@@ -11,7 +11,9 @@ module XsdModel
     end
 
     def call
-      klass = XsdModel::Elements.const_get xml.name.classify
+      # can't use classify because there are classes like TotalDigits in plural
+      # klass = XsdModel::Elements.const_get xml.name.classify
+      klass = XsdModel::Elements.const_get xml.name.camelize
       element = klass.new
       element.attributes = xml.attributes.transform_values { |v| v.value }
       element.namespaces = xml.namespaces
