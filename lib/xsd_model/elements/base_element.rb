@@ -20,6 +20,38 @@ module XsdModel
         @namespaces = hashes[1] || {}
       end
 
+      def xmlns_prefix
+        nil if xmlns_uri.nil?
+
+        ary = namespaces.to_a
+
+        candidates = ary.select do |n|
+          n[1] == xmlns_uri
+        end.map(&:first)
+
+        full_prefix = candidates.find do |c|
+          c.start_with? 'xmlns:'
+        end
+
+        full_prefix&.gsub('xmlns:', '')
+      end
+
+      def xmlns_uri
+        namespaces['xmlns']
+      end
+
+      def name_with_prefix
+        [xmlns_prefix, name].compact.join(':')
+      end
+
+      def type_with_prefix
+        if type&.include? ':'
+          type
+        else
+          [xmlns_prefix, type].compact.join(':')
+        end
+      end
+
       def xsd_prefix
         namespaces.invert[XSD_URI].gsub('xmlns:', '')
       end

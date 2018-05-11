@@ -19,6 +19,14 @@ module XsdModel
       def multiple?
         max_occurs > 1
       end
+
+      def has_ref?
+        !ref.nil?
+      end
+
+      def ref
+        attributes['ref']
+      end
     end
   end
 end
