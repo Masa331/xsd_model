@@ -29,7 +29,7 @@ module XsdModel
       attributes = node.attributes.transform_values(&:value)
       namespaces = node.namespaces
 
-      klass.new(children, attributes, namespaces)
+      klass.new(children, attributes: attributes, namespaces: namespaces, css_path: node.css_path)
     end
 
     def collect_children(node)

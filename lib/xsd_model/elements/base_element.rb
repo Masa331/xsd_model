@@ -9,15 +9,14 @@ module XsdModel
 
       XSD_URI = 'http://www.w3.org/2001/XMLSchema'
 
-      attr_accessor :children, :attributes, :namespaces
+      attr_accessor :children, :attributes, :namespaces, :css_path
       attribute_method :name, :type, :ref
 
-      def initialize(*args)
-        hashes, rest = args.partition { |arg| arg.is_a? Hash }
-
-        @children = rest.flatten
-        @attributes = hashes[0] || {}
-        @namespaces = hashes[1] || {}
+      def initialize(*args, attributes: {}, namespaces: {}, css_path: '')
+        @children = args.flatten
+        @attributes = attributes
+        @namespaces = namespaces
+        @css_path = css_path
       end
 
       def xmlns_prefix

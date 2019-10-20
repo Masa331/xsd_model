@@ -4,7 +4,13 @@ module XsdModel
       include BaseElement
       extend AttributeMethods
 
+      attr_accessor :source
       attribute_method 'targetNamespace'
+
+      def initialize(*args, attributes: {}, namespaces: {}, css_path: '')
+        super
+        @source = '(initial)'
+      end
 
       def collect_imported_schemas(options = {})
         _collect_imported_schemas(self, options)

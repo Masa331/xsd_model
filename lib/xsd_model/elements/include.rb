@@ -10,7 +10,9 @@ module XsdModel
       def load(options = {})
         xml_string = File.read(schema_location)
 
-        XsdModel.parse(xml_string, options).schema
+        schema = XsdModel.parse(xml_string, options).schema
+        schema.source = schema_location
+        schema
       end
     end
   end
