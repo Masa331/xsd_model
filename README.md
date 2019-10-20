@@ -1,7 +1,5 @@
 # XsdModel [![Build Status](https://travis-ci.org/Masa331/xsd_model.svg?branch=master)](https://travis-ci.org/Masa331/xsd_model)
 
-*Note that this can be unstable until 1.0.0*
-
 Takes a XSD string and parses it into a tree structure of nodes. A lot similar to Nokogiri but with few more useful methods.
 
 Content:
@@ -11,7 +9,7 @@ Content:
 
 ## About
 
-This gem provides a parser which takes XSD in a string and outputs tree structure of objects much like Nokogiri(which is internally used for parsing) does with XML. Each returned object represents one specific XSD core element and implements specific API to simplify the work with XSD. As it's written under the top heading, the API can be unstable until 1.0.0 and might miss some core XSD elements, attribute accessors, etc.
+XsdModel parses a XML Schema Definition (XSD) and returns tree structure of objects representing XSD nodes. Each object implements specific API simplify the work with XSD.
 
 ## Api
 
